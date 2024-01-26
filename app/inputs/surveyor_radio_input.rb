@@ -4,7 +4,7 @@ class SurveyorRadioInput < Formtastic::Inputs::RadioInput
     super
   end
   def choice_html(choice)
-    output = ""
+    output = +""
     output << template.content_tag(:label,
       builder.radio_button(input_name, choice_value(choice), input_html_options.merge(choice_html_options(choice)).merge(:required => false)) <<
       "<span class='answer-option'>#{choice_label(choice)}</span>".html_safe,

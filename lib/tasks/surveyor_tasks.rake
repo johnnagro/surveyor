@@ -5,7 +5,7 @@ namespace :surveyor do
   task :parse => :environment do
     raise "USAGE: file name required e.g. 'FILE=surveys/kitchen_sink_survey.rb'" if ENV["FILE"].blank?
     file = File.join(Rails.root, ENV["FILE"])
-    raise "File does not exist: #{file}" unless FileTest.exists?(file)
+    raise "File does not exist: #{file}" unless FileTest.exist?(file)
     puts "--- Parsing #{file} ---"
     Surveyor::Parser.parse_file(file, {:trace => Rake.application.options.trace})
     puts "--- Done #{file} ---"
@@ -14,7 +14,7 @@ namespace :surveyor do
   task :redcap => :environment do
     raise "USAGE: file name required e.g. 'FILE=surveys/redcap_demo_survey.csv'" if ENV["FILE"].blank?
     file = File.join(Rails.root, ENV["FILE"])
-    raise "File does not exist: #{file}" unless FileTest.exists?(file)
+    raise "File does not exist: #{file}" unless FileTest.exist?(file)
     puts "--- Parsing #{file} ---"
     Surveyor::RedcapParser.parse File.read(file), File.basename(file, ".csv"), {:trace => Rake.application.options.trace}
     puts "--- Done #{file} ---"
@@ -30,7 +30,7 @@ namespace :surveyor do
       print "Which survey would you like to unparse? "
       id = $stdin.gets.to_i
       if survey_to_unparse = surveys.detect{|s| s.id == id}
-        filename = "surveys/#{survey_to_unparse.access_code}_#{Date.today.to_s(:db)}.rb"
+        filename = "surveys/#{survey_to_unparse.access_code}_#{Date.today.to_fs(:db)}.rb"
         puts "unparsing #{survey_to_unparse.title} to #{filename}"
         File.open(filename, 'w') {|f| f.write(Surveyor::Unparser.unparse(survey_to_unparse))}
       else
